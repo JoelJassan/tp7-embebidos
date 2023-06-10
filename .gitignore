@@ -148,8 +148,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/c,macos,linux,windows,visualstudiocode
-
-
 # Agregados por mi
 build/**
+*.yml
+
+# End of https://www.toptal.com/developers/gitignore/api/c,macos,linux,windows,visualstudiocode
