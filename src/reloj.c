@@ -1,9 +1,65 @@
+/**
+ * @file reloj.c
+ * @author Joel Jassan <joeljassan@hotmail.com>
+ * @brief  Funcionalidad de un reloj de 24 hs
+ * @date 2023-06-10
+ * 
+ * @copyright Copyright (c) 2023. All rights reserved.
+ * 
+ */
+/* --------------------------------------------------------------------------------------------- */ 
+
+
+
+/* ---  Headers files inclusions   ------------------------------------------------------------- */
+
 #include "reloj.h"
 
-clock_t ClockCreate(int tics_per_second){
+/* ---  Macros definitions  -------------------------------------------------------------------- */
 
+struct clock_s {
+    uint8_t hora_actual[6];
+    bool valida;
+};
+
+/*---  Private Data Declaration  --------------------------------------------------------------- */
+
+/*---  Public Data Declaration  ---------------------------------------------------------------- */
+
+/*---  Private Function Declaration  ----------------------------------------------------------- */
+
+/*---  Public Function Declaration  ------------------------------------------------------------ */
+
+/*---  Private Data Definition  ---------------------------------------------------------------- */
+
+/*---  Public Data Definition  ----------------------------------------------------------------- */
+
+/*---  Private Function Definition  ------------------------------------------------------------ */
+
+/*---  Public Function Definition  ------------------------------------------------------------- */
+
+/*---  Private Function Implementation  -------------------------------------------------------- */
+
+/*---  Public Function Implementation  --------------------------------------------------------- */
+
+clock_t ClockCreate(int tics_per_second){
+    static  struct clock_s self [1];
+    memset(self, 0, sizeof(self));
+
+    return self;
 }
 
 bool ClockGetTime(clock_t reloj, uint8_t * hora, int size){
+    memcpy(hora, reloj->hora_actual, size);
 
+    return reloj->valida;
 }
+
+// Tengo que hacer una con hora invalida 
+bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size){
+    memcpy(reloj->hora_actual, hora, size);
+    reloj->valida = true;
+    return true;
+}
+
+/*---  End of File  ---------------------------------------------------------------------------- */
