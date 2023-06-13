@@ -81,7 +81,12 @@ void ClockAddTime(clock_t reloj, int size){
         reloj->hora_actual[size - 4] ++;    //decena minutos
     }
 
+    if (reloj->hora_actual[size - 4] == 6) {
+        reloj->hora_actual[size - 4] = 0;
+        reloj->hora_actual[size - 5] ++;    //decena minutos
+    }
 
+    
 
 
 
