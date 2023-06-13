@@ -9,7 +9,6 @@
  */
 
 
-// ‣ Fijar la alarma y avanzar el reloj para que suene.
 // ‣ Fijar la alarma, deshabilitarla y avanzar el reloj para no
 // suene.
 // ‣ Hacer sonar la alarma y posponerla.
@@ -23,6 +22,7 @@
 /* ---  Macros definitions  -------------------------------------------------------------------- */
 
 #define CLOCK_SIZE 6
+#define ALARM_SIZE 4
 #define TICKS_PER_SECOND 5
 
 /*---  Private Function Implementation  -------------------------------------------------------- */
@@ -202,26 +202,29 @@ void test_increment_random(void) {
 
 // ‣ Fijar la hora de la alarma y consultarla. Separo en dos metodos (set y get)
 void test_start_up_alarm(void) {
-    const uint8_t ESPERADO [] = {0, 0, 0, 0, 0, 0};
-    uint8_t alarm_time [CLOCK_SIZE] = {0xFF};
-    clock_t alarma = ClockCreate(TICKS_PER_SECOND);
+    const uint8_t ESPERADO [] = {0, 0, 0, 0};
+    uint8_t alarm_time [ALARM_SIZE] = {0xFF};
+    clock_t alarma = ClockCreate(0);
 
-    TEST_ASSERT_FALSE(AlarmGetTime(alarma, alarm_time, CLOCK_SIZE));
-    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, alarm_time, CLOCK_SIZE);
+    TEST_ASSERT_FALSE(AlarmGetTime(alarma, alarm_time, ALARM_SIZE));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, alarm_time, ALARM_SIZE);
 }
 
 void test_adjust_alarm (void) {
-    const uint8_t ESPERADO [] = {1, 2, 4, 4, 1, 2};
-    uint8_t alarm_time [CLOCK_SIZE] = {0xFF};
-    clock_t alarma = ClockCreate(TICKS_PER_SECOND);
+    const uint8_t ESPERADO [] = {1, 2, 4, 4};
+    uint8_t alarm_time [ALARM_SIZE] = {0xFF};
+    clock_t alarma = ClockCreate(0);
 
-    TEST_ASSERT_TRUE(AlarmSetTime(alarma, ESPERADO, CLOCK_SIZE));
-    TEST_ASSERT_TRUE(AlarmGetTime(alarma, alarm_time, CLOCK_SIZE));
-    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, alarm_time, CLOCK_SIZE);
+    TEST_ASSERT_TRUE(AlarmSetTime(alarma, ESPERADO, ALARM_SIZE));
+    TEST_ASSERT_TRUE(AlarmGetTime(alarma, alarm_time, ALARM_SIZE));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, alarm_time, ALARM_SIZE);
 }
 
+// ‣ Fijar la alarma y avanzar el reloj para que suene.
+
+
 /* Falta:
- * (-) limitar las horas que se pueden poner en set alarm
+ * (-) limitar las horas que se pueden poner en set alarm (mismo metodo que set clock)
 */
 
 /*---  End of File  ---------------------------------------------------------------------------- */

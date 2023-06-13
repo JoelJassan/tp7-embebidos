@@ -103,8 +103,8 @@ void ClockAddTime(clock_t reloj, int size){
 
 
 
-bool AlarmGetTime(clock_t alarma, uint8_t * hora, int size){
-    return ClockGetTime(alarma, hora, size);
+bool AlarmGetTime(clock_t alarma, uint8_t * alarm_time, int size){
+    return ClockGetTime(alarma, alarm_time, size);
 }
 
 bool AlarmSetTime(clock_t alarma, const uint8_t * alarm_time, int size){
