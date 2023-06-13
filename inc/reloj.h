@@ -26,12 +26,38 @@ typedef struct clock_s * clock_t;
 
 /*---  Public Function Declaration  ------------------------------------------------------------ */
 
+/**
+ * @brief Metodo para crear un reloj despertador.
+ * 
+ * @param tics_per_second Cantidad de pulsos de reloj para aumentar una cuenta.
+ * @return clock_t Puntero al descriptor del reloj
+ */
 clock_t ClockCreate(int tics_per_second);
 
+/**
+ * @brief Metodo para mostrar la hora del reloj.
+ * 
+ * @param reloj Puntero al descriptor del reloj que se debe leer
+ * @param hora Puntero donde se carga la hora del reloj
+ * @param size Tamaño del reloj
+ * @return true La hora mostrada es valida
+ * @return false La hora mostrada es invalida
+ */
 bool ClockGetTime(clock_t reloj, uint8_t * hora, int size);
 
+/**
+ * @brief Metodo para setear una hora en el reloj
+ * 
+ * @param reloj Puntero al descriptor del reloj
+ * @param hora Puntero que guarda la hora del reloj a setear.
+ * @param size Tamaño del reloj
+ * @return true Se seteo la hora del reloj
+ * @return false No se seteo la hora del reloj
+ */
 bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size);
 
+
+int ClockAddTime(clock_t reloj, int size);
 /*---  End of File  ---------------------------------------------------------------------------- */
 
 

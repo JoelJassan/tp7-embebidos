@@ -55,11 +55,19 @@ bool ClockGetTime(clock_t reloj, uint8_t * hora, int size){
     return reloj->valida;
 }
 
-// Tengo que hacer una con hora invalida 
 bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size){
     memcpy(reloj->hora_actual, hora, size);
     reloj->valida = true;
-    return true;
+    return reloj->valida;
+}
+
+int ClockAddTime(clock_t reloj, int size){
+    
+    if(reloj->hora_actual[size-1] < 10)
+        reloj->hora_actual[size-1] ++;
+
+    return reloj->hora_actual[size-1];
+
 }
 
 /*---  End of File  ---------------------------------------------------------------------------- */
