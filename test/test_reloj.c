@@ -149,8 +149,8 @@ void test_increment_uni_hour(void) {
 
 // Aumenta la decena de las horas
 void test_increment_dec_hour(void) {
-    uint8_t hora [] = {1, 2, 5, 9, 5, 9};
-    const uint8_t ESPERADO [] = {1, 3, 0, 0, 0, 0};
+    uint8_t hora [] = {1, 9, 5, 9, 5, 9};
+    const uint8_t ESPERADO [] = {2, 0, 0, 0, 0, 0};
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
     ClockSetTime(reloj, hora, CLOCK_SIZE);
@@ -171,7 +171,34 @@ void test_increment_uni_hour_with_max_dec(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
 
+// Aumenta la unidad de horas para reiniciar todo a cero
+void test_clock_to_zero(void) {
+    uint8_t hora [] = {2, 3, 5, 9, 5, 9};
+    const uint8_t ESPERADO [] = {0, 0, 0, 0, 0, 0};
 
-// falta suma de horas correcto (de 13 a 14, y de 23 a 0)
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
+    ClockAddTime(reloj, CLOCK_SIZE);
+
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
+}
+
+// Aumento en lugar aleatorio
+void test_increment_random(void) {
+    uint8_t hora [] = {1, 8, 2, 0, 5, 7};
+    const uint8_t ESPERADO [] = {1, 8, 2, 0, 5, 8};
+
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
+    ClockAddTime(reloj, CLOCK_SIZE);
+
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
+}
+
+/* Falta:
+ * (+) hora que se cumpla de 13 a 14, hasta 19 a 20 normalmente 
+ * (+) si HH=2X, que llegue hasta 23 y reinicie a cero
+ * (-) limitar las horas que se pueden poner
+*/
 
 /*---  End of File  ---------------------------------------------------------------------------- */

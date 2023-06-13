@@ -64,34 +64,39 @@ bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size){
 void ClockAddTime(clock_t reloj, int size){
     
     if (reloj->hora_actual[size - 1] < 10)
-        reloj->hora_actual[size - 1] ++;    //unidad segundos
+        reloj->hora_actual[size - 1] ++;    // sumo unidad segundos
 
     if (reloj->hora_actual[size - 1] == 10) {
         reloj->hora_actual[size - 1] = 0;
-        reloj->hora_actual[size - 2] ++;    //decena segundos
+        reloj->hora_actual[size - 2] ++;    // sumo decena segundos
     }
 
     if (reloj->hora_actual[size - 2] == 6) {
         reloj->hora_actual[size - 2] = 0;
-        reloj->hora_actual[size - 3] ++;    //unidad minutos
+        reloj->hora_actual[size - 3] ++;    // sumo unidad minutos
     }
 
     if (reloj->hora_actual[size - 3] == 10) {
         reloj->hora_actual[size - 3] = 0;
-        reloj->hora_actual[size - 4] ++;    //decena minutos
+        reloj->hora_actual[size - 4] ++;    // sumo decena minutos
     }
 
     if (reloj->hora_actual[size - 4] == 6) {
         reloj->hora_actual[size - 4] = 0;
-        reloj->hora_actual[size - 5] ++;    //decena minutos
+        reloj->hora_actual[size - 5] ++;    // sumo unidad horas
     }
 
-    
-
-
-
-    
-
+    if ((reloj->hora_actual[size - 6]) != 2) 
+        if (reloj->hora_actual[size - 5] == 10) {
+            reloj->hora_actual[size - 5] = 0;
+            reloj->hora_actual[size - 6] ++;    // sumo decena horas
+        }
+    if ((reloj->hora_actual[size - 6]) == 2) 
+        if (reloj->hora_actual[size - 5] == 4) {
+            reloj->hora_actual[size - 5] = 0;
+            reloj->hora_actual[size - 6] = 0;
+        }
+        
 }
 
 /*---  End of File  ---------------------------------------------------------------------------- */
