@@ -9,7 +9,6 @@
  */
 
 
-// ‣ Fijar la hora de la alarma y consultarla.
 // ‣ Fijar la alarma y avanzar el reloj para que suene.
 // ‣ Fijar la alarma, deshabilitarla y avanzar el reloj para no
 // suene.
@@ -36,7 +35,9 @@ void setUp(void) {
 
 /* ---  Testing Function Implementation  ------------------------------------------------------- */
 
-// Al inicializar el reloj está en 00:00 y con hora invalida.
+
+
+// ‣ Al inicializar el reloj está en 00:00 y con hora invalida.
 void test_start_up(void) {
     const uint8_t ESPERADO [] = {0, 0, 0, 0, 0, 0};
     uint8_t hora [CLOCK_SIZE] = {0xFF};
@@ -47,7 +48,7 @@ void test_start_up(void) {
 }
 
 
-// Al ajustar la hora el reloj queda en hora y es válida.
+// ‣ Al ajustar la hora el reloj queda en hora y es válida.
 void test_adjust_time (void) {
     const uint8_t ESPERADO [] = {1, 2, 3, 4, 0, 2};
     uint8_t hora [CLOCK_SIZE] = {0xFF};
@@ -58,7 +59,7 @@ void test_adjust_time (void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, CLOCK_SIZE);
 }
 
-// Después de n ciclos de reloj la hora avanza un segundo, diez segundos, un minutos, diez minutos, 
+// ‣ Después de n ciclos de reloj la hora avanza un segundo, diez segundos, un minutos, diez minutos, 
 // una hora, diez horas, y un día completo.
 
 // Aumenta la unidad de los segundos
@@ -133,8 +134,6 @@ void test_increment_uni_min_with_max_dec(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
 
-//------------------------------------------------TESTEADO HASTA AQUI, Y TODO FUNCIONANDO
-
 // Aumenta la unidad de las horas
 void test_increment_uni_hour(void) {
     uint8_t hora [] = {1, 2, 5, 9, 5, 9};
@@ -196,9 +195,33 @@ void test_increment_random(void) {
 }
 
 /* Falta:
- * (+) hora que se cumpla de 13 a 14, hasta 19 a 20 normalmente 
- * (+) si HH=2X, que llegue hasta 23 y reinicie a cero
- * (-) limitar las horas que se pueden poner
+ * (-) limitar las horas que se pueden poner en set clock
+*/
+
+
+
+// ‣ Fijar la hora de la alarma y consultarla. Separo en dos metodos (set y get)
+void test_start_up_alarm(void) {
+    const uint8_t ESPERADO [] = {0, 0, 0, 0, 0, 0};
+    uint8_t alarm_time [CLOCK_SIZE] = {0xFF};
+    clock_t alarma = ClockCreate(TICKS_PER_SECOND);
+
+    TEST_ASSERT_FALSE(AlarmGetTime(alarma, alarm_time, CLOCK_SIZE));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, alarm_time, CLOCK_SIZE);
+}
+
+void test_adjust_alarm (void) {
+    const uint8_t ESPERADO [] = {1, 2, 4, 4, 1, 2};
+    uint8_t alarm_time [CLOCK_SIZE] = {0xFF};
+    clock_t alarma = ClockCreate(TICKS_PER_SECOND);
+
+    TEST_ASSERT_TRUE(AlarmSetTime(alarma, ESPERADO, CLOCK_SIZE));
+    TEST_ASSERT_TRUE(AlarmGetTime(alarma, alarm_time, CLOCK_SIZE));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, alarm_time, CLOCK_SIZE);
+}
+
+/* Falta:
+ * (-) limitar las horas que se pueden poner en set alarm
 */
 
 /*---  End of File  ---------------------------------------------------------------------------- */

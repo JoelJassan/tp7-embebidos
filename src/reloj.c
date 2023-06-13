@@ -42,6 +42,8 @@ struct clock_s {
 
 /*---  Public Function Implementation  --------------------------------------------------------- */
 
+
+
 clock_t ClockCreate(int tics_per_second){
     static  struct clock_s self [1];
     memset(self, 0, sizeof(self));
@@ -97,6 +99,16 @@ void ClockAddTime(clock_t reloj, int size){
             reloj->hora_actual[size - 6] = 0;
         }
         
+}
+
+
+
+bool AlarmGetTime(clock_t alarma, uint8_t * hora, int size){
+    return ClockGetTime(alarma, hora, size);
+}
+
+bool AlarmSetTime(clock_t alarma, const uint8_t * alarm_time, int size){
+    return ClockSetTime(alarma, alarm_time, size);
 }
 
 /*---  End of File  ---------------------------------------------------------------------------- */

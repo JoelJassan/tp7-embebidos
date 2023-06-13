@@ -26,6 +26,8 @@ typedef struct clock_s * clock_t;
 
 /*---  Public Function Declaration  ------------------------------------------------------------ */
 
+
+
 /**
  * @brief Metodo para crear un reloj despertador.
  * 
@@ -56,8 +58,21 @@ bool ClockGetTime(clock_t reloj, uint8_t * hora, int size);
  */
 bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size);
 
-
+/**
+ * @brief Metodo para sumar +1 en la unidad de segundos (falta la referencia de tics de ClkCreate)
+ * 
+ * @param reloj Puntero al descriptor del reloj
+ * @param size Tamaño del reloj
+ */
 void ClockAddTime(clock_t reloj, int size);
+
+
+
+bool AlarmGetTime(clock_t alarma, uint8_t * hora, int size);
+
+bool AlarmSetTime(clock_t alarma, const uint8_t * alarm_time, int size);
+
+
 /*---  End of File  ---------------------------------------------------------------------------- */
 
 
