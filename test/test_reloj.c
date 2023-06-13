@@ -29,7 +29,7 @@
 /*---  Private Function Implementation  -------------------------------------------------------- */
 
 void setUp(void) {
-    static const uint8_t SET_INICIAL[] = {1, 2, 3, 4, 0, 0};
+    const uint8_t SET_INICIAL[] = {1, 2, 3, 4, 0, 0};
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
     ClockSetTime(reloj, SET_INICIAL, sizeof(SET_INICIAL));
 }
@@ -38,7 +38,7 @@ void setUp(void) {
 
 // Al inicializar el reloj está en 00:00 y con hora invalida.
 void test_start_up(void) {
-    static const uint8_t ESPERADO [] = {0, 0, 0, 0, 0, 0};
+    const uint8_t ESPERADO [] = {0, 0, 0, 0, 0, 0};
     uint8_t hora [CLOCK_SIZE] = {0xFF};
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
 
@@ -49,7 +49,7 @@ void test_start_up(void) {
 
 // Al ajustar la hora el reloj queda en hora y es válida.
 void test_adjust_time (void) {
-    static const uint8_t ESPERADO [] = {1, 2, 3, 4, 0, 2};
+    const uint8_t ESPERADO [] = {1, 2, 3, 4, 0, 2};
     uint8_t hora [CLOCK_SIZE] = {0xFF};
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
 
@@ -58,18 +58,95 @@ void test_adjust_time (void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, hora, CLOCK_SIZE);
 }
 
-//Después de n ciclos de reloj la hora avanza un segundo, diez segundos, un minutos, diez minutos, 
-//una hora, diez horas, y un día completo.
+// Después de n ciclos de reloj la hora avanza un segundo, diez segundos, un minutos, diez minutos, 
+// una hora, diez horas, y un día completo.
 
 // Aumenta la unidad de los segundos
 void test_increment_uni_second(void) {
-    static const uint8_t SET_INICIAL[] = {1, 2, 3, 4, 0, 0};
-    static const uint8_t ESPERADO [] = {1, 2, 3, 4, 0, 1};
+    uint8_t hora [] = {1, 2, 3, 4, 0, 1};
+    const uint8_t ESPERADO [] = {1, 2, 3, 4, 0, 2};
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
-    ClockSetTime(reloj, SET_INICIAL, sizeof(SET_INICIAL));
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
     ClockAddTime(reloj, CLOCK_SIZE);
 
-    TEST_ASSERT_EQUAL_UINT8_ARRAY(reloj, ESPERADO, CLOCK_SIZE);
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
+
+// Aumenta la decena de los segundos
+void test_increment_dec_second(void) {
+    uint8_t hora [] = {1, 2, 3, 4, 0, 9};
+    const uint8_t ESPERADO [] = {1, 2, 3, 4, 1, 0};
+
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
+    ClockAddTime(reloj, CLOCK_SIZE);
+
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
+}
+
+// Aumenta la unidad de segundos, con decenas de segundos en cuenta maxima
+void test_increment_uni_second_with_max_dec(void) {
+    uint8_t hora [] = {1, 2, 3, 4, 5, 8};
+    const uint8_t ESPERADO [] = {1, 2, 3, 4, 5, 9};
+
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
+    ClockAddTime(reloj, CLOCK_SIZE);
+
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
+}
+
+// Aumenta la unidad de los minutos
+void test_increment_uni_min(void) {
+    uint8_t hora [] = {1, 2, 3, 4, 5, 9};
+    const uint8_t ESPERADO [] = {1, 2, 3, 5, 0, 0};
+
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
+    ClockAddTime(reloj, CLOCK_SIZE);
+
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
+}
+
+// Aumenta la decena de los minutos
+void test_increment_dec_min(void) {
+    uint8_t hora [] = {1, 2, 4, 9, 5, 9};
+    const uint8_t ESPERADO [] = {1, 2, 5, 0, 0, 0};
+
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
+    ClockAddTime(reloj, CLOCK_SIZE);
+
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
+}
+
+// Aumenta la unidad de los minutos, con decenas en cuenta maxima
+void test_increment_uni_min_with_max_dec(void) {
+    uint8_t hora [] = {1, 2, 5, 3, 5, 9};
+    const uint8_t ESPERADO [] = {1, 2, 5, 4, 0, 0};
+
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
+    ClockAddTime(reloj, CLOCK_SIZE);
+
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
+}
+
+//------------------------------------------------TESTEADO HASTA AQUI, Y TODO FUNCIONANDO
+
+// Aumenta la unidad de las horas
+void test_increment_uni_min_with_max_dec(void) {
+    uint8_t hora [] = {1, 2, 5, 3, 5, 9};
+    const uint8_t ESPERADO [] = {1, 3, 0, 0, 0, 0};
+
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
+    ClockAddTime(reloj, CLOCK_SIZE);
+
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
+}
+
+// falta suma de horas correcto (de 13 a 14, y de 23 a 0)
+
 /*---  End of File  ---------------------------------------------------------------------------- */

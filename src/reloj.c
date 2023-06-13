@@ -61,12 +61,31 @@ bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size){
     return reloj->valida;
 }
 
-int ClockAddTime(clock_t reloj, int size){
+void ClockAddTime(clock_t reloj, int size){
     
-    if(reloj->hora_actual[size-1] < 10)
-        reloj->hora_actual[size-1] ++;
+    if (reloj->hora_actual[size - 1] < 10)
+        reloj->hora_actual[size - 1] ++;    //unidad segundos
 
-    return reloj->hora_actual[size-1];
+    if (reloj->hora_actual[size - 1] == 10) {
+        reloj->hora_actual[size - 1] = 0;
+        reloj->hora_actual[size - 2] ++;    //decena segundos
+    }
+
+    if (reloj->hora_actual[size - 2] == 6) {
+        reloj->hora_actual[size - 2] = 0;
+        reloj->hora_actual[size - 3] ++;    //unidad minutos
+    }
+
+    if (reloj->hora_actual[size - 3] == 10) {
+        reloj->hora_actual[size - 3] = 0;
+        reloj->hora_actual[size - 4] ++;    //decena minutos
+    }
+
+
+
+
+
+    
 
 }
 

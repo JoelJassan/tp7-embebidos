@@ -57,7 +57,7 @@ bool ClockGetTime(clock_t reloj, uint8_t * hora, int size);
 bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size);
 
 
-int ClockAddTime(clock_t reloj, int size);
+void ClockAddTime(clock_t reloj, int size);
 /*---  End of File  ---------------------------------------------------------------------------- */
 
 
