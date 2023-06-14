@@ -19,6 +19,8 @@
 
 struct clock_s {
     uint8_t hora_actual[6];
+    uint32_t ticks_per_sec;
+    uint32_t current_tick;
     bool valida;
 };
 
@@ -47,6 +49,7 @@ struct clock_s {
 clock_t ClockCreate(int tics_per_second){
     static  struct clock_s self [1];
     memset(self, 0, sizeof(self));
+    self->ticks_per_sec = tics_per_second;
 
     return self;
 }
@@ -63,35 +66,44 @@ bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size){
     return reloj->valida;
 }
 
-void ClockAddTime(clock_t reloj, int size){
-    
-    if (reloj->hora_actual[size - 1] < 10)
-        reloj->hora_actual[size - 1] ++;    // sumo unidad segundos
+void ClockRefresh(clock_t reloj, int size){
+    reloj->current_tick++;
 
+    // sumo unidad segundos
+    if (reloj->current_tick >= reloj->ticks_per_sec) {
+        reloj->current_tick = 0;
+        reloj->hora_actual[size - 1] ++;
+    }   
+
+    // sumo decena segundos
     if (reloj->hora_actual[size - 1] >= 10) {
         reloj->hora_actual[size - 1] = 0;
-        reloj->hora_actual[size - 2] ++;    // sumo decena segundos
+        reloj->hora_actual[size - 2] ++;
     }
 
+    // sumo unidad minutos
     if (reloj->hora_actual[size - 2] >= 6) {
         reloj->hora_actual[size - 2] = 0;
-        reloj->hora_actual[size - 3] ++;    // sumo unidad minutos
+        reloj->hora_actual[size - 3] ++;
     }
 
+    // sumo decena minutos
     if (reloj->hora_actual[size - 3] >= 10) {
         reloj->hora_actual[size - 3] = 0;
-        reloj->hora_actual[size - 4] ++;    // sumo decena minutos
+        reloj->hora_actual[size - 4] ++;
     }
 
+    // sumo unidad horas
     if (reloj->hora_actual[size - 4] >= 6) {
         reloj->hora_actual[size - 4] = 0;
-        reloj->hora_actual[size - 5] ++;    // sumo unidad horas
+        reloj->hora_actual[size - 5] ++;
     }
 
+    // sumo decena horas
     if ((reloj->hora_actual[size - 6]) != 2) 
         if (reloj->hora_actual[size - 5] == 10) {
             reloj->hora_actual[size - 5] = 0;
-            reloj->hora_actual[size - 6] ++;    // sumo decena horas
+            reloj->hora_actual[size - 6] ++;
         }
     if ((reloj->hora_actual[size - 6]) >= 2) 
         if (reloj->hora_actual[size - 5] == 4) {
@@ -100,6 +112,7 @@ void ClockAddTime(clock_t reloj, int size){
         }
         
 } //No sabria como hacerlo solo para HH:MM
+
 
 
 clock_t AlarmCreate(void){

@@ -64,9 +64,7 @@ bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size);
  * @param reloj Puntero al descriptor del reloj
  * @param size Tamaño del reloj
  */
-void ClockAddTime(clock_t reloj, int size);
-
-
+void ClockRefresh(clock_t reloj, int size);
 
 /**
  * @brief Metodo para crear una alarma.

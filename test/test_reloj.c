@@ -9,8 +9,7 @@
  */
 
 
-// ‣ Fijar la alarma, deshabilitarla y avanzar el reloj para no
-// suene.
+// ‣ Fijar la alarma, deshabilitarla y avanzar el reloj para que no suene.
 // ‣ Hacer sonar la alarma y posponerla.
 // ‣ Hacer sonar la alarma y cancelarla hasta el otro dia..
 
@@ -24,6 +23,13 @@
 #define CLOCK_SIZE 6
 #define ALARM_SIZE 4
 #define TICKS_PER_SECOND 5
+
+#define SIMULATE_SECONDS(FUNCTION, VALUE)                                                         \
+    for (int count = 0; count < VALUE; count++) {                                                 \
+        for (int indice = 0; indice < TICKS_PER_SECOND; indice++) {                               \
+            FUNCTION;                                                                             \
+        }                                                                                         \
+    }
 
 /*---  Private Function Implementation  -------------------------------------------------------- */
 
@@ -64,12 +70,12 @@ void test_adjust_time (void) {
 
 // Aumenta la unidad de los segundos
 void test_increment_uni_second(void) {
-    uint8_t hora [] = {1, 2, 3, 4, 0, 1};
-    const uint8_t ESPERADO [] = {1, 2, 3, 4, 0, 2};
+    uint8_t hora [] = {1, 2, 3, 4, 0, 0};
+    const uint8_t ESPERADO [] = {1, 2, 3, 4, 0, 1};
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
     ClockSetTime(reloj, hora, CLOCK_SIZE);
-    ClockAddTime(reloj, CLOCK_SIZE);
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), 1);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
@@ -81,43 +87,43 @@ void test_increment_dec_second(void) {
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
     ClockSetTime(reloj, hora, CLOCK_SIZE);
-    ClockAddTime(reloj, CLOCK_SIZE);
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), 1);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
 
 // Aumenta la unidad de segundos, con decenas de segundos en cuenta maxima
 void test_increment_uni_second_with_max_dec(void) {
-    uint8_t hora [] = {1, 2, 3, 4, 5, 8};
+    uint8_t hora [] = {1, 2, 3, 4, 5, 0};
     const uint8_t ESPERADO [] = {1, 2, 3, 4, 5, 9};
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
     ClockSetTime(reloj, hora, CLOCK_SIZE);
-    ClockAddTime(reloj, CLOCK_SIZE);
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), 9);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
 
 // Aumenta la unidad de los minutos
 void test_increment_uni_min(void) {
-    uint8_t hora [] = {1, 2, 3, 4, 5, 9};
+    uint8_t hora [] = {1, 2, 3, 4, 5, 0};
     const uint8_t ESPERADO [] = {1, 2, 3, 5, 0, 0};
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
     ClockSetTime(reloj, hora, CLOCK_SIZE);
-    ClockAddTime(reloj, CLOCK_SIZE);
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), 10);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
 
 // Aumenta la decena de los minutos
 void test_increment_dec_min(void) {
-    uint8_t hora [] = {1, 2, 4, 9, 5, 9};
+    uint8_t hora [] = {1, 2, 4, 9, 5, 0};
     const uint8_t ESPERADO [] = {1, 2, 5, 0, 0, 0};
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
     ClockSetTime(reloj, hora, CLOCK_SIZE);
-    ClockAddTime(reloj, CLOCK_SIZE);
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), 10);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
@@ -125,23 +131,23 @@ void test_increment_dec_min(void) {
 // Aumenta la unidad de los minutos, con decenas en cuenta maxima
 void test_increment_uni_min_with_max_dec(void) {
     uint8_t hora [] = {1, 2, 5, 3, 5, 9};
-    const uint8_t ESPERADO [] = {1, 2, 5, 4, 0, 0};
+    const uint8_t ESPERADO [] = {1, 2, 5, 4, 0, 8};
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
     ClockSetTime(reloj, hora, CLOCK_SIZE);
-    ClockAddTime(reloj, CLOCK_SIZE);
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), 9);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
 
 // Aumenta la unidad de las horas
 void test_increment_uni_hour(void) {
-    uint8_t hora [] = {1, 2, 5, 9, 5, 9};
-    const uint8_t ESPERADO [] = {1, 3, 0, 0, 0, 0};
+    uint8_t hora [] = {1, 3, 5, 9, 5, 9};
+    const uint8_t ESPERADO [] = {1, 4, 0, 0, 0, 8};
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
     ClockSetTime(reloj, hora, CLOCK_SIZE);
-    ClockAddTime(reloj, CLOCK_SIZE);
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), 9);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
@@ -149,11 +155,11 @@ void test_increment_uni_hour(void) {
 // Aumenta la decena de las horas
 void test_increment_dec_hour(void) {
     uint8_t hora [] = {1, 9, 5, 9, 5, 9};
-    const uint8_t ESPERADO [] = {2, 0, 0, 0, 0, 0};
+    const uint8_t ESPERADO [] = {2, 0, 0, 0, 0, 8};
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
     ClockSetTime(reloj, hora, CLOCK_SIZE);
-    ClockAddTime(reloj, CLOCK_SIZE);
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), 9);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
@@ -161,11 +167,11 @@ void test_increment_dec_hour(void) {
 // Aumenta la unidad de las horas, con decenas en cuenta maxima
 void test_increment_uni_hour_with_max_dec(void) {
     uint8_t hora [] = {2, 2, 5, 9, 5, 9};
-    const uint8_t ESPERADO [] = {2, 3, 0, 0, 0, 0};
+    const uint8_t ESPERADO [] = {2, 3, 0, 0, 0, 8};
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
     ClockSetTime(reloj, hora, CLOCK_SIZE);
-    ClockAddTime(reloj, CLOCK_SIZE);
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), 9);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
@@ -173,34 +179,35 @@ void test_increment_uni_hour_with_max_dec(void) {
 // Aumenta la unidad de horas para reiniciar todo a cero
 void test_clock_to_zero(void) {
     uint8_t hora [] = {2, 3, 5, 9, 5, 9};
-    const uint8_t ESPERADO [] = {0, 0, 0, 0, 0, 0};
+    const uint8_t ESPERADO [] = {0, 0, 0, 0, 0, 8};
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
     ClockSetTime(reloj, hora, CLOCK_SIZE);
-    ClockAddTime(reloj, CLOCK_SIZE);
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), 9);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
 
 // Aumento en lugar aleatorio
 void test_increment_random(void) {
-    uint8_t hora [] = {1, 8, 2, 0, 5, 7};
-    const uint8_t ESPERADO [] = {1, 8, 2, 0, 5, 8};
+    uint8_t hora [] = {0, 0, 0, 0, 0, 0};
+    const uint8_t ESPERADO [] = {0, 0, 0, 0, 0, 5};
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
     ClockSetTime(reloj, hora, CLOCK_SIZE);
-    ClockAddTime(reloj, CLOCK_SIZE);
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), (60*60*24 + 5));
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
 
-//Funcion para testear que la hora a setear sea correcta
-void test_edit_time_clock(void) {
 
-}
 /* Falta:
  * (-) limitar las horas que se pueden poner en set clock
 */
+
+
+
+
 
 
 
@@ -229,6 +236,7 @@ void test_adjust_alarm (void) {
 
 /* Falta:
  * (-) limitar las horas que se pueden poner en set alarm (mismo metodo que set clock)
+ * (-) togglear la alarma para encendido y apagado
 */
 
 /*---  End of File  ---------------------------------------------------------------------------- */
