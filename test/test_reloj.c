@@ -230,6 +230,16 @@ void test_adjust_alarm (void) {
 }
 
 // ‣ Fijar la alarma y avanzar el reloj para que suene.
+void test_activate_alarm (void) {
+    const uint8_t hora [] = {0, 0, 0, 0, 0, 0};
+    const uint8_t alarm_time [] = {1, 1, 3, 0, 0, 0};
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
+
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
+    AlarmSetTime(reloj, alarm_time, ALARM_SIZE);
+
+
+}   //todavia no tiene funcionalidad
 
 
 /* Falta:
