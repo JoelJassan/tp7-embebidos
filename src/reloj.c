@@ -37,6 +37,7 @@ struct clock_s {
 
     struct alarm_s {
         uint8_t hora_alarma[ALARM_SIZE];
+        uint8_t hora_alarma_nueva[ALARM_SIZE];
         bool active;
         bool ringing;
     } alarma [1];
@@ -142,6 +143,7 @@ bool AlarmGetTime(clock_t reloj, uint8_t * alarm_time, int size){
 
 bool AlarmSetTime(clock_t reloj, const uint8_t * alarm_time, int size){
     memcpy(reloj->alarma->hora_alarma, alarm_time, size);
+    memcpy(reloj->alarma->hora_alarma_nueva, alarm_time, size);
     return reloj->alarma->active;
 }
 
@@ -150,9 +152,22 @@ bool ActivateAlarm(clock_t reloj){
     return reloj->alarma->active;
 }
 
+bool DeactivateAlarm(clock_t reloj){
+    reloj->alarma->active = false;
+    return reloj->alarma->active;
+}
+
 bool TriggerAlarm(clock_t reloj){
-    reloj->alarma->ringing = true;
+    if (reloj->alarma->active == true)
+        reloj->alarma->ringing = true;
     return reloj->alarma->ringing;
 }
 
+bool PostponeAlarm(clock_t reloj){
+    if (reloj->alarma->ringing == true){
+        reloj->alarma->ringing = false;
+        reloj->alarma->hora_alarma_nueva [POSICION_UNI_MM] += 5;
+    }
+    return reloj->alarma->ringing;
+}
 /*---  End of File  ---------------------------------------------------------------------------- */

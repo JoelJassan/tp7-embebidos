@@ -9,8 +9,6 @@
  */
 
 
-// ‣ Fijar la alarma, deshabilitarla y avanzar el reloj para que no suene.
-// ‣ Hacer sonar la alarma y posponerla.
 // ‣ Hacer sonar la alarma y cancelarla hasta el otro dia..
 
 /* ---  Headers files inclusions  -------------------------------------------------------------- */
@@ -206,9 +204,6 @@ void test_increment_random(void) {
 
 
 
-
-
-
 // ‣ Fijar la hora de la alarma y consultarla. Separo en dos metodos (set y get)
 void test_start_up_alarm(void) {
     const uint8_t ESPERADO [] = {0, 0, 0, 0, 0, 0};
@@ -241,7 +236,7 @@ void test_activated_alarm (void) {
     TEST_ASSERT_TRUE(ActivateAlarm(reloj));
 }
 
-void test_simulate_clock_with_alarm (void) {
+void test_simulate_clock_with_alarm_on (void) {
     const uint8_t hora [] = {0, 0, 0, 0, 0, 0};
     const uint8_t alarm_time [] = {1, 1, 3, 0, 0, 0};
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
@@ -256,12 +251,45 @@ void test_simulate_clock_with_alarm (void) {
     TEST_ASSERT_TRUE(TriggerAlarm(reloj));
 }
 
+// ‣ Fijar la alarma, deshabilitarla y avanzar el reloj para que no suene.
+void test_simulate_clock_with_alarm_off (void) {
+    const uint8_t hora [] = {0, 0, 0, 0, 0, 0};
+    const uint8_t alarm_time [] = {1, 1, 3, 0, 0, 0};
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
+
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
+    AlarmSetTime(reloj, alarm_time, ALARM_SIZE);
+    ActivateAlarm(reloj);
+    
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), (60*60*11 + 60*30));
+
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(reloj, alarm_time, ALARM_SIZE);
+    TEST_ASSERT_FALSE(DeactivateAlarm(reloj));    
+    TEST_ASSERT_FALSE(TriggerAlarm(reloj));
+}
+
+// ‣ Hacer sonar la alarma y posponerla.
+void test_postpone_alarm (void) {
+    const uint8_t hora [] = {0, 0, 0, 0, 0, 0};
+    const uint8_t alarm_time [] = {0, 0, 3, 0, 0, 0};
+    const uint8_t alarm_time_post [] = {0, 0, 3, 5, 0, 0};
+
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
+
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
+    AlarmSetTime(reloj, alarm_time, ALARM_SIZE);
+    ActivateAlarm(reloj);
+
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), (60*30));
+    TEST_ASSERT_TRUE(TriggerAlarm(reloj));
+    TEST_ASSERT_FALSE(PostponeAlarm(reloj));
+}
 
 
 
 /* Falta:
  * (-) limitar las horas que se pueden poner en set alarm (mismo metodo que set clock)
- * (-) togglear la alarma para encendido y apagado
+ * (+) togglear la alarma para encendido y apagado
 */
 
 /*---  End of File  ---------------------------------------------------------------------------- */

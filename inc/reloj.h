@@ -98,8 +98,11 @@ bool AlarmSetTime(clock_t reloj, const uint8_t * alarm_time, int size);
 
 bool ActivateAlarm(clock_t reloj);
 
+bool DeactivateAlarm(clock_t reloj);
+
 bool TriggerAlarm(clock_t reloj);
 
+bool PostponeAlarm(clock_t reloj);
 /*---  End of File  ---------------------------------------------------------------------------- */
 
 
