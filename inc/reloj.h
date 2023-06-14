@@ -96,15 +96,51 @@ bool AlarmGetTime(clock_t reloj, uint8_t * alarm_time, int size);
  */
 bool AlarmSetTime(clock_t reloj, const uint8_t * alarm_time, int size);
 
+/**
+ * @brief Metodo para activar la alarma
+ * 
+ * @param reloj Puntero al descriptor del reloj
+ * @return true Alarma Activa
+ * @return false Alarma Inactiva
+ */
 bool ActivateAlarm(clock_t reloj);
 
+/**
+ * @brief Metodo para desactivar la alarma
+ * 
+ * @param reloj Puntero al descriptor del reloj
+ * @return true Alarma Activa
+ * @return false Alarma Inactiva
+ */
 bool DeactivateAlarm(clock_t reloj);
 
+/**
+ * @brief Metodo para disparar la alarma (hacerla sonar)
+ * 
+ * @param reloj Puntero al descriptor del reloj
+ * @return true Alarma sonando
+ * @return false Alarma sin sonar
+ */
 bool TriggerAlarm(clock_t reloj);
 
+/**
+ * @brief Metodo para posponer la alarma 5 minutos
+ * 
+ * @param reloj Puntero al descriptor del reloj
+ * @return true Alarma sonando
+ * @return false Alarma sin sonar
+ */
 bool PostponeAlarm(clock_t reloj);
 
+/**
+ * @brief Metodo para cancelar la alarma hasta el dia siguiente
+ * 
+ * @param reloj Puntero al descriptor del reloj
+ * @return true Alarma cancelada
+ * @return false Alarma no cancelada
+ */
 bool CancelAlarm(clock_t reloj);
+
 /*---  End of File  ---------------------------------------------------------------------------- */
 
 
