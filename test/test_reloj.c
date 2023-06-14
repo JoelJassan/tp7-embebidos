@@ -288,7 +288,6 @@ void test_postpone_alarm (void) {
 void test_cancel_alarm (void) {
     const uint8_t hora [] = {0, 0, 0, 0, 0, 0};
     const uint8_t alarm_time [] = {0, 0, 3, 0, 0, 0};
-    uint8_t alarm_get [] = {0, 0, 3, 5, 0, 0};
 
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
 

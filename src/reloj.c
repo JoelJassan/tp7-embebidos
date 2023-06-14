@@ -167,7 +167,7 @@ bool TriggerAlarm(clock_t reloj){
 bool PostponeAlarm(clock_t reloj){
     if (reloj->alarma->ringing == true){
         reloj->alarma->ringing = false;
-        reloj->alarma->hora_alarma_nueva [POSICION_UNI_MM] += 5;
+        reloj->alarma->hora_alarma_nueva [POSICION_UNI_MM] += 1; // posterga 1 minuto
     }
     return reloj->alarma->ringing;
 }
@@ -175,7 +175,7 @@ bool PostponeAlarm(clock_t reloj){
 bool CancelAlarm(clock_t reloj){
     if (reloj->alarma->ringing == true){
         reloj->alarma->ringing = false;
-        reloj->alarma->canceled = true; //para leer de nuevo, podria trabajar con pulsos de systick
+        reloj->alarma->canceled = true; // para leer de nuevo podria trabajar con pulsos de systick
         memcpy(reloj->alarma->hora_alarma_nueva, reloj->alarma->hora_alarma, ALARM_SIZE);
     }
     return reloj->alarma->canceled;
