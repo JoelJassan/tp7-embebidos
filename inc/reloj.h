@@ -103,6 +103,8 @@ bool DeactivateAlarm(clock_t reloj);
 bool TriggerAlarm(clock_t reloj);
 
 bool PostponeAlarm(clock_t reloj);
+
+bool CancelAlarm(clock_t reloj);
 /*---  End of File  ---------------------------------------------------------------------------- */
 
 

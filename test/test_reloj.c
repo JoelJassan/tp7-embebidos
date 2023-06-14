@@ -8,9 +8,6 @@
  * 
  */
 
-
-// ‣ Hacer sonar la alarma y cancelarla hasta el otro dia..
-
 /* ---  Headers files inclusions  -------------------------------------------------------------- */
 
 #include "unity.h"
@@ -285,6 +282,22 @@ void test_postpone_alarm (void) {
     TEST_ASSERT_FALSE(PostponeAlarm(reloj));
 }
 
+// ‣ Hacer sonar la alarma y cancelarla hasta el otro dia.
+void test_cancel_alarm (void) {
+    const uint8_t hora [] = {0, 0, 0, 0, 0, 0};
+    const uint8_t alarm_time [] = {0, 0, 3, 0, 0, 0};
+    uint8_t alarm_get [] = {0, 0, 3, 5, 0, 0};
+
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
+
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
+    AlarmSetTime(reloj, alarm_time, ALARM_SIZE);
+    ActivateAlarm(reloj);
+
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), (60*30));
+    TEST_ASSERT_TRUE(TriggerAlarm(reloj));
+    TEST_ASSERT_TRUE(CancelAlarm(reloj));
+}
 
 
 /* Falta:

@@ -40,6 +40,7 @@ struct clock_s {
         uint8_t hora_alarma_nueva[ALARM_SIZE];
         bool active;
         bool ringing;
+        bool canceled;
     } alarma [1];
 };
 
@@ -169,5 +170,14 @@ bool PostponeAlarm(clock_t reloj){
         reloj->alarma->hora_alarma_nueva [POSICION_UNI_MM] += 5;
     }
     return reloj->alarma->ringing;
+}
+
+bool CancelAlarm(clock_t reloj){
+    if (reloj->alarma->ringing == true){
+        reloj->alarma->ringing = false;
+        reloj->alarma->canceled = true; //para leer de nuevo, podria trabajar con pulsos de systick
+        memcpy(reloj->alarma->hora_alarma_nueva, reloj->alarma->hora_alarma, ALARM_SIZE);
+    }
+    return reloj->alarma->canceled;
 }
 /*---  End of File  ---------------------------------------------------------------------------- */
