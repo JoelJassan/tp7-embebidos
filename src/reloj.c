@@ -99,9 +99,12 @@ void ClockAddTime(clock_t reloj, int size){
             reloj->hora_actual[size - 6] = 0;
         }
         
+} //No sabria como hacerlo solo para HH:MM
+
+
+clock_t AlarmCreate(void){
+    return ClockCreate(0);
 }
-
-
 
 bool AlarmGetTime(clock_t alarma, uint8_t * alarm_time, int size){
     return ClockGetTime(alarma, alarm_time, size);

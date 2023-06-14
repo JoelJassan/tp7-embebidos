@@ -67,6 +67,14 @@ bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size);
 void ClockAddTime(clock_t reloj, int size);
 
 
+
+/**
+ * @brief Metodo para crear una alarma.
+ * 
+ * @return clock_t Puntero al descriptor de la alarma
+ */
+clock_t AlarmCreate(void);
+
 /**
  * @brief Metodo para mostrar la hora de la alarma
  * 
@@ -84,8 +92,8 @@ bool AlarmGetTime(clock_t alarma, uint8_t * alarm_time, int size);
  * @param alarma Puntero al descriptor de la alarma
  * @param alarm_time Puntero que almacena la hora de la alarma
  * @param size Tamaño del reloj de la alarma
- * @return true 
- * @return false 
+ * @return true Alarma valida
+ * @return false Alarma invalida
  */
 bool AlarmSetTime(clock_t alarma, const uint8_t * alarm_time, int size);
 

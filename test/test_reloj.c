@@ -194,6 +194,10 @@ void test_increment_random(void) {
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, reloj, CLOCK_SIZE);
 }
 
+//Funcion para testear que la hora a setear sea correcta
+void test_edit_time_clock(void) {
+
+}
 /* Falta:
  * (-) limitar las horas que se pueden poner en set clock
 */
@@ -202,18 +206,18 @@ void test_increment_random(void) {
 
 // ‣ Fijar la hora de la alarma y consultarla. Separo en dos metodos (set y get)
 void test_start_up_alarm(void) {
-    const uint8_t ESPERADO [] = {0, 0, 0, 0};
+    const uint8_t ESPERADO [] = {0, 0, 0, 0, 0, 0};
     uint8_t alarm_time [ALARM_SIZE] = {0xFF};
-    clock_t alarma = ClockCreate(0);
+    clock_t alarma = AlarmCreate();
 
     TEST_ASSERT_FALSE(AlarmGetTime(alarma, alarm_time, ALARM_SIZE));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, alarm_time, ALARM_SIZE);
 }
 
 void test_adjust_alarm (void) {
-    const uint8_t ESPERADO [] = {1, 2, 4, 4};
+    const uint8_t ESPERADO [] = {1, 2, 4, 4, 0, 0};
     uint8_t alarm_time [ALARM_SIZE] = {0xFF};
-    clock_t alarma = ClockCreate(0);
+    clock_t alarma = AlarmCreate();
 
     TEST_ASSERT_TRUE(AlarmSetTime(alarma, ESPERADO, ALARM_SIZE));
     TEST_ASSERT_TRUE(AlarmGetTime(alarma, alarm_time, ALARM_SIZE));
