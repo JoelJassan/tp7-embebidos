@@ -27,11 +27,18 @@
 #define LIMITE_DECENA 6
 #define LIMITE_UNIDAD 10
 
+struct alarm_s {
+    uint8_t hora_alarma[ALARM_SIZE];
+    bool active;
+};
+
 struct clock_s {
-    uint8_t hora_actual[6];
+    uint8_t hora_actual[CLOCK_SIZE];
     uint32_t ticks_per_sec;
     uint32_t current_tick;
     bool valida;
+
+    alarm_t alarma;
 };
 
 /*---  Private Data Declaration  --------------------------------------------------------------- */
@@ -43,6 +50,9 @@ struct clock_s {
 /*---  Public Function Declaration  ------------------------------------------------------------ */
 
 /*---  Private Data Definition  ---------------------------------------------------------------- */
+
+static  struct clock_s self [1];
+static  struct alarm_s self_alarm [1];
 
 /*---  Public Data Definition  ----------------------------------------------------------------- */
 
@@ -57,9 +67,11 @@ struct clock_s {
 
 
 clock_t ClockCreate(int tics_per_second){
-    static  struct clock_s self [1];
     memset(self, 0, sizeof(self));
+    memset(self_alarm, 0, sizeof(self_alarm));
+
     self->ticks_per_sec = tics_per_second;
+    self->alarma = self_alarm;
 
     return self;
 }
@@ -123,16 +135,17 @@ void ClockRefresh(clock_t reloj, int size){
 }
 
 
-clock_t AlarmCreate(void){
-    return ClockCreate(0);
+
+
+bool AlarmGetTime(clock_t reloj, uint8_t * alarm_time, int size){
+    memcpy(alarm_time, reloj->alarma->hora_alarma, size);
+    return reloj->alarma->active;
 }
 
-bool AlarmGetTime(clock_t alarma, uint8_t * alarm_time, int size){
-    return ClockGetTime(alarma, alarm_time, size);
-}
-
-bool AlarmSetTime(clock_t alarma, const uint8_t * alarm_time, int size){
-    return ClockSetTime(alarma, alarm_time, size);
+bool AlarmSetTime(clock_t reloj, const uint8_t * alarm_time, int size){
+    memcpy(reloj->alarma->hora_alarma, alarm_time, size);
+    reloj->alarma->active = true;
+    return reloj->alarma->active;    
 }
 
 /*---  End of File  ---------------------------------------------------------------------------- */

@@ -20,8 +20,6 @@
 
 /* ---  Macros definitions  -------------------------------------------------------------------- */
 
-#define CLOCK_SIZE 6
-#define ALARM_SIZE 4
 #define TICKS_PER_SECOND 5
 
 #define SIMULATE_SECONDS(FUNCTION, VALUE)                                                         \
@@ -215,19 +213,19 @@ void test_increment_random(void) {
 void test_start_up_alarm(void) {
     const uint8_t ESPERADO [] = {0, 0, 0, 0, 0, 0};
     uint8_t alarm_time [ALARM_SIZE] = {0xFF};
-    clock_t alarma = AlarmCreate();
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
 
-    TEST_ASSERT_FALSE(AlarmGetTime(alarma, alarm_time, ALARM_SIZE));
+    TEST_ASSERT_FALSE(AlarmGetTime(reloj, alarm_time, ALARM_SIZE));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, alarm_time, ALARM_SIZE);
 }
 
 void test_adjust_alarm (void) {
     const uint8_t ESPERADO [] = {1, 2, 4, 4, 0, 0};
     uint8_t alarm_time [ALARM_SIZE] = {0xFF};
-    clock_t alarma = AlarmCreate();
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
 
-    TEST_ASSERT_TRUE(AlarmSetTime(alarma, ESPERADO, ALARM_SIZE));
-    TEST_ASSERT_TRUE(AlarmGetTime(alarma, alarm_time, ALARM_SIZE));
+    TEST_ASSERT_TRUE(AlarmSetTime(reloj, ESPERADO, ALARM_SIZE));
+    TEST_ASSERT_TRUE(AlarmGetTime(reloj, alarm_time, ALARM_SIZE));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, alarm_time, ALARM_SIZE);
 }
 

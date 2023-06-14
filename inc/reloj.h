@@ -19,8 +19,14 @@
 
 /* ---  Macros definitions  -------------------------------------------------------------------- */
 
+#define CLOCK_SIZE 6
+#define ALARM_SIZE 4
+
 // Puntero a la estructura de tipo clock_s
 typedef struct clock_s * clock_t;
+
+// Puntero a la estructura de tipo alarm_s
+typedef struct alarm_s * alarm_t;
 
 /*---  Public Data Declaration  ---------------------------------------------------------------- */
 
@@ -66,34 +72,29 @@ bool ClockSetTime(clock_t reloj, const uint8_t * hora, int size);
  */
 void ClockRefresh(clock_t reloj, int size);
 
-/**
- * @brief Metodo para crear una alarma.
- * 
- * @return clock_t Puntero al descriptor de la alarma
- */
-clock_t AlarmCreate(void);
+
 
 /**
  * @brief Metodo para mostrar la hora de la alarma
  * 
- * @param alarma Puntero al descriptor de la alarma
+ * @param reloj Puntero al descriptor del reloj
  * @param alarm_time Puntero donde se carga la alarma para mostrarla
  * @param size Tamaño del reloj de alarma
- * @return true Alarma valida
- * @return false Alarma invalida
+ * @return true Alarma activa
+ * @return false Alarma inactiva
  */
-bool AlarmGetTime(clock_t alarma, uint8_t * alarm_time, int size);
+bool AlarmGetTime(clock_t reloj, uint8_t * alarm_time, int size);
 
 /**
  * @brief Metodo para setear la hora de la alarma
  * 
- * @param alarma Puntero al descriptor de la alarma
+ * @param reloj Puntero al descriptor del reloj
  * @param alarm_time Puntero que almacena la hora de la alarma
  * @param size Tamaño del reloj de la alarma
- * @return true Alarma valida
- * @return false Alarma invalida
+ * @return true Alarma activa
+ * @return false Alarma inactiva
  */
-bool AlarmSetTime(clock_t alarma, const uint8_t * alarm_time, int size);
+bool AlarmSetTime(clock_t reloj, const uint8_t * alarm_time, int size);
 
 
 /*---  End of File  ---------------------------------------------------------------------------- */
