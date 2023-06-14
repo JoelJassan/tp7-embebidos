@@ -17,6 +17,16 @@
 
 /* ---  Macros definitions  -------------------------------------------------------------------- */
 
+#define POSICION_UNI_SS POSICION_DEC_SS + 1
+#define POSICION_DEC_SS POSICION_UNI_MM + 1
+#define POSICION_UNI_MM POSICION_DEC_MM + 1
+#define POSICION_DEC_MM POSICION_UNI_HH + 1
+#define POSICION_UNI_HH POSICION_DEC_HH + 1
+#define POSICION_DEC_HH 0
+
+#define LIMITE_DECENA 6
+#define LIMITE_UNIDAD 10
+
 struct clock_s {
     uint8_t hora_actual[6];
     uint32_t ticks_per_sec;
@@ -72,47 +82,45 @@ void ClockRefresh(clock_t reloj, int size){
     // sumo unidad segundos
     if (reloj->current_tick >= reloj->ticks_per_sec) {
         reloj->current_tick = 0;
-        reloj->hora_actual[size - 1] ++;
+        reloj->hora_actual[POSICION_UNI_SS] ++;
     }   
 
     // sumo decena segundos
-    if (reloj->hora_actual[size - 1] >= 10) {
-        reloj->hora_actual[size - 1] = 0;
-        reloj->hora_actual[size - 2] ++;
+    if (reloj->hora_actual[POSICION_UNI_SS] >= LIMITE_UNIDAD) {
+        reloj->hora_actual[POSICION_UNI_SS] = 0;
+        reloj->hora_actual[POSICION_DEC_SS] ++;
     }
 
     // sumo unidad minutos
-    if (reloj->hora_actual[size - 2] >= 6) {
-        reloj->hora_actual[size - 2] = 0;
-        reloj->hora_actual[size - 3] ++;
+    if (reloj->hora_actual[POSICION_DEC_SS] >= LIMITE_DECENA) {
+        reloj->hora_actual[POSICION_DEC_SS] = 0;
+        reloj->hora_actual[POSICION_UNI_MM] ++;
     }
 
     // sumo decena minutos
-    if (reloj->hora_actual[size - 3] >= 10) {
-        reloj->hora_actual[size - 3] = 0;
-        reloj->hora_actual[size - 4] ++;
+    if (reloj->hora_actual[POSICION_UNI_MM] >= LIMITE_UNIDAD) {
+        reloj->hora_actual[POSICION_UNI_MM] = 0;
+        reloj->hora_actual[POSICION_DEC_MM] ++;
     }
 
     // sumo unidad horas
-    if (reloj->hora_actual[size - 4] >= 6) {
-        reloj->hora_actual[size - 4] = 0;
-        reloj->hora_actual[size - 5] ++;
+    if (reloj->hora_actual[POSICION_DEC_MM] >= LIMITE_DECENA) {
+        reloj->hora_actual[POSICION_DEC_MM] = 0;
+        reloj->hora_actual[POSICION_UNI_HH] ++;
     }
 
     // sumo decena horas
-    if ((reloj->hora_actual[size - 6]) != 2) 
-        if (reloj->hora_actual[size - 5] == 10) {
-            reloj->hora_actual[size - 5] = 0;
-            reloj->hora_actual[size - 6] ++;
-        }
-    if ((reloj->hora_actual[size - 6]) >= 2) 
-        if (reloj->hora_actual[size - 5] == 4) {
-            reloj->hora_actual[size - 5] = 0;
-            reloj->hora_actual[size - 6] = 0;
-        }
-        
-} //No sabria como hacerlo solo para HH:MM
+    if (reloj->hora_actual[POSICION_UNI_HH] >= LIMITE_UNIDAD) {
+        reloj->hora_actual[POSICION_UNI_HH] = 0;
+        reloj->hora_actual[POSICION_DEC_HH] ++;
+    }
 
+    if ((reloj->hora_actual[POSICION_DEC_HH]) == 2 && reloj->hora_actual[POSICION_UNI_HH] == 4) {
+        reloj->hora_actual[POSICION_DEC_HH] = 0;
+        reloj->hora_actual[POSICION_UNI_HH] = 0;
+    }
+        
+}
 
 
 clock_t AlarmCreate(void){
