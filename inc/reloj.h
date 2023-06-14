@@ -96,6 +96,9 @@ bool AlarmGetTime(clock_t reloj, uint8_t * alarm_time, int size);
  */
 bool AlarmSetTime(clock_t reloj, const uint8_t * alarm_time, int size);
 
+bool ActivateAlarm(clock_t reloj);
+
+bool TriggerAlarm(clock_t reloj);
 
 /*---  End of File  ---------------------------------------------------------------------------- */
 

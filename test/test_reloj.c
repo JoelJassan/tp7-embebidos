@@ -224,13 +224,13 @@ void test_adjust_alarm (void) {
     uint8_t alarm_time [ALARM_SIZE] = {0xFF};
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
 
-    TEST_ASSERT_TRUE(AlarmSetTime(reloj, ESPERADO, ALARM_SIZE));
-    TEST_ASSERT_TRUE(AlarmGetTime(reloj, alarm_time, ALARM_SIZE));
+    TEST_ASSERT_FALSE(AlarmSetTime(reloj, ESPERADO, ALARM_SIZE));
+    TEST_ASSERT_FALSE(AlarmGetTime(reloj, alarm_time, ALARM_SIZE));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, alarm_time, ALARM_SIZE);
 }
 
 // ‣ Fijar la alarma y avanzar el reloj para que suene.
-void test_activate_alarm (void) {
+void test_activated_alarm (void) {
     const uint8_t hora [] = {0, 0, 0, 0, 0, 0};
     const uint8_t alarm_time [] = {1, 1, 3, 0, 0, 0};
     clock_t reloj = ClockCreate(TICKS_PER_SECOND);
@@ -238,8 +238,25 @@ void test_activate_alarm (void) {
     ClockSetTime(reloj, hora, CLOCK_SIZE);
     AlarmSetTime(reloj, alarm_time, ALARM_SIZE);
 
+    TEST_ASSERT_TRUE(ActivateAlarm(reloj));
+}
 
-}   //todavia no tiene funcionalidad
+void test_simulate_clock_with_alarm (void) {
+    const uint8_t hora [] = {0, 0, 0, 0, 0, 0};
+    const uint8_t alarm_time [] = {1, 1, 3, 0, 0, 0};
+    clock_t reloj = ClockCreate(TICKS_PER_SECOND);
+
+    ClockSetTime(reloj, hora, CLOCK_SIZE);
+    AlarmSetTime(reloj, alarm_time, ALARM_SIZE);
+    ActivateAlarm(reloj);
+
+    SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), (60*60*11 + 60*30));
+    
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(reloj, alarm_time, ALARM_SIZE);
+    TEST_ASSERT_TRUE(TriggerAlarm(reloj));
+}
+
+
 
 
 /* Falta:
