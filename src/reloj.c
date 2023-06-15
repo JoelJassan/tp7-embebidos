@@ -176,7 +176,7 @@ bool PostponeAlarm(clock_t reloj){
         reloj->alarma->hora_alarma_nueva [POSICION_UNI_MM] += 1; // posterga 1 minuto
     }
     return reloj->alarma->ringing;
-}
+} //falta la logica para que la postergada tenga hora correcta
 
 bool CancelAlarm(clock_t reloj){
     if (reloj->alarma->ringing == true){
