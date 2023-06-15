@@ -28,6 +28,13 @@
 #define LIMITE_UNIDAD 10
 
 
+struct alarm_s {
+        uint8_t hora_alarma[ALARM_SIZE];
+        uint8_t hora_alarma_nueva[ALARM_SIZE];
+        bool active;
+        bool ringing;
+        bool canceled;
+};
 
 struct clock_s {
     uint8_t hora_actual[CLOCK_SIZE];
@@ -35,13 +42,7 @@ struct clock_s {
     uint32_t current_tick;
     bool valida;
 
-    struct alarm_s {
-        uint8_t hora_alarma[ALARM_SIZE];
-        uint8_t hora_alarma_nueva[ALARM_SIZE];
-        bool active;
-        bool ringing;
-        bool canceled;
-    } alarma [1];
+    struct alarm_s alarma [1];
 };
 
 /*---  Private Data Declaration  --------------------------------------------------------------- */
@@ -106,6 +107,7 @@ void ClockRefresh(clock_t reloj, int size){
     if (reloj->hora_actual[POSICION_DEC_SS] >= LIMITE_DECENA) {
         reloj->hora_actual[POSICION_DEC_SS] = 0;
         reloj->hora_actual[POSICION_UNI_MM] ++;
+        TriggerAlarm(reloj);
     }
 
     // sumo decena minutos
@@ -155,12 +157,16 @@ bool ActivateAlarm(clock_t reloj){
 
 bool DeactivateAlarm(clock_t reloj){
     reloj->alarma->active = false;
+    reloj->alarma->ringing = false;
     return reloj->alarma->active;
 }
 
 bool TriggerAlarm(clock_t reloj){
-    if (reloj->alarma->active == true)
-        reloj->alarma->ringing = true;
+    if (!memcmp(reloj->alarma->hora_alarma_nueva,reloj->hora_actual,ALARM_SIZE)){
+        if (reloj->alarma->active == true)
+            reloj->alarma->ringing = true;
+    }
+    
     return reloj->alarma->ringing;
 }
 
@@ -175,9 +181,8 @@ bool PostponeAlarm(clock_t reloj){
 bool CancelAlarm(clock_t reloj){
     if (reloj->alarma->ringing == true){
         reloj->alarma->ringing = false;
-        reloj->alarma->canceled = true; // para leer de nuevo podria trabajar con pulsos de systick
         memcpy(reloj->alarma->hora_alarma_nueva, reloj->alarma->hora_alarma, ALARM_SIZE);
     }
-    return reloj->alarma->canceled;
+    return true;
 }
 /*---  End of File  ---------------------------------------------------------------------------- */

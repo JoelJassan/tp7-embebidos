@@ -258,13 +258,12 @@ void test_simulate_clock_with_alarm_off (void) {
 
     ClockSetTime(reloj, hora, CLOCK_SIZE);
     AlarmSetTime(reloj, alarm_time, ALARM_SIZE);
-    ActivateAlarm(reloj);
+    DeactivateAlarm(reloj);
     
     SIMULATE_SECONDS(ClockRefresh(reloj, CLOCK_SIZE), (60*60*11 + 60*30));
 
-    TEST_ASSERT_EQUAL_UINT8_ARRAY(reloj, alarm_time, ALARM_SIZE);
-    TEST_ASSERT_FALSE(DeactivateAlarm(reloj));    
     TEST_ASSERT_FALSE(TriggerAlarm(reloj));
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(reloj, alarm_time, ALARM_SIZE);
 }
 
 // ‣ Hacer sonar la alarma y posponerla.
