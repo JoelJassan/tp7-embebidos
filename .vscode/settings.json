@@ -1,6 +1,15 @@
 {
-    "files.associations": {
-        "reloj.h": "c",
-        "string.h": "c"
-    }
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+    "git.confirmSync": false,
+    "workbench.colorTheme": "Visual Studio Dark - C++",
+    "editor.formatOnSave": false,
+    "[c]": {
+        "editor.defaultFormatter": "xaver.clang-format",
+        "editor.wordBasedSuggestions": false,
+        "editor.suggest.insertMode": "replace",
+        "editor.semanticHighlighting.enabled": true
+    },
+    "cortex-debug.gdbPath": "gdb-multiarch",
 }
