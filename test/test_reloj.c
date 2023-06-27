@@ -214,7 +214,7 @@ void test_adjust_alarm(void) {
   uint8_t alarm_time[ALARM_SIZE] = {0xFF};
   clock_t reloj = ClockCreate(TICKS_PER_SECOND);
 
-  TEST_ASSERT_FALSE(AlarmSetTime(reloj, ESPERADO, ALARM_SIZE));
+  TEST_ASSERT_TRUE(AlarmSetTime(reloj, ESPERADO, ALARM_SIZE));
   TEST_ASSERT_FALSE(AlarmGetTime(reloj, alarm_time, ALARM_SIZE));
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO, alarm_time, ALARM_SIZE);
 }
